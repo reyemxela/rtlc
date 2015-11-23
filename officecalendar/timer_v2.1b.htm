@@ -1,0 +1,249 @@
+<html>
+<head>
+<script>
+	var TimerID;
+	var TitleID;
+//	var SmallTimerID;
+//	var SmallTitleID;
+
+	var TotalSeconds = 0;
+	var timerinterval;
+	var CurrentTimer = -1;
+
+	var Mode = 0;
+	var ModeNames = new Array("Normal (no lift)", "Communion", "Missionary", "Lift");
+	var NamesArray;
+	var TimesArray;
+	var AutoArray;
+
+
+	function Initial() {
+		ModeSwitch(0);
+		TimerID = document.getElementById('timer');
+		TitleID = document.getElementById('title');
+//		SmallTimerID = document.getElementById('smalltimer');
+//		SmallTitleID = document.getElementById('smalltitle');
+		UpdateTimer();
+	}
+
+	function ModeSwitch(Mode) {
+		if (Mode == 0) { //Normal
+			NamesArray = new Array("Countdown",	"Worship",	"Transition",	"Meet+Greet",	"Tithe Message",	"Sermon",	"Altar");
+			TimesArray = new Array(5,			20,			3,				3,				5,					34,			8);
+			AutoArray = new Array(1,			1,			1,				1,				1,					0,			0);
+			/*
+			NamesArray = new Array("Countdown",	"Worship",	"Transition",	"Meet+Greet",	"Tithe Message",	"Sermon",	"Altar Transition",	"Alter Song",	"Altar Call");
+			TimesArray = new Array(5,			20,			3,				2,				5,					34,			2,					2,				4);
+			AutoArray = new Array(1,			1,			1,				1,				1,					0,			1,					1,				0);
+			*/
+		} else if(Mode == 1) { //Communion
+			NamesArray = new Array("Countdown",	"Worship",	"Communion",	"Meet+Greet",	"Tithe Message",	"Sermon",	"Altar");
+			TimesArray = new Array(5,			18,			6,				2,				5,					34,			8);
+			AutoArray = new Array(1,			1,			1,				1,				1,					0,			0);
+		} else if(Mode == 2) { //Missionary
+			NamesArray = new Array("Countdown",	"Worship",	"Missionary",	"Meet+Greet",	"Tithe Message",	"Sermon",	"Altar");
+			TimesArray = new Array(5,			18,			5,				2,				5,					34,			8);
+			AutoArray = new Array(1,			1,			1,				1,				1,					0,			0);
+		} else if(Mode == 3) { //NoLift
+			NamesArray = new Array("Countdown",	"Worship",	"Transition",	"Meet+Greet",	"Tithe Message",	"Sermon",	"Altar");
+			TimesArray = new Array(5,			25,			3,				2,				5,					34,			8);
+			AutoArray = new Array(1,			1,			1,				1,				1,					0,			0);
+		}
+		document.getElementById('buttons').innerHTML = "";
+		for (var i=0; i<NamesArray.length; i++) {
+			document.getElementById('buttons').innerHTML += '<input type="button" name="timer1" value="'+NamesArray[i]+'" onClick="CreateTimer('+i+');">';
+		}
+		document.getElementById('smallmode').innerHTML = 'Mode: -'+ModeNames[Mode]+'-';
+	}
+
+	function ClearTimer() {
+		window.clearInterval(timerinterval);
+		TotalSeconds = 0;
+		CurrentTimer = -1;
+		TimerID.style.color="ffffff";
+		//SmallTimerID.style.color="ffffff";
+		TitleID.innerHTML = "-";
+		//SmallTitleID.innerHTML = "-";
+		UpdateTimer();
+	}
+
+	function CreateTimer(timerID) {
+		CurrentTimer = timerID;
+		TitleID.innerHTML = NamesArray[timerID];
+		//SmallTitleID.innerHTML = NamesArray[timerID];
+
+
+		if (NamesArray[timerID] == "Sermon") {
+			var currentTime = new Date();
+			var endTime = new Date();
+			var Hours = currentTime.getHours();
+
+			if ((Hours >= 18) && (Hours <= 20)) endTime.setHours(20, 5, 0, 0);
+			else if (Hours == 11) endTime.setHours(12, 5, 0, 0);
+			else if ((Hours >= 9) && (Hours < 11)) endTime.setHours(10, 35, 0, 0);
+
+			TotalSeconds = Math.floor((endTime.getTime() - currentTime.getTime()) / 1000);
+			if (TotalSeconds < 1) TotalSeconds = TimesArray[timerID]*60;
+		}
+
+		else {
+			TotalSeconds = TimesArray[timerID]*60;
+		}
+
+		TimerID.style.color="ffffff";
+		//SmallTimerID.style.color="ffffff";
+		UpdateTimer();
+		window.clearInterval(timerinterval);
+		timerinterval = window.setInterval("Tick()", 1000);
+	}
+
+	function Tick() {
+		if ((TotalSeconds <= 61) && (TotalSeconds > 15)) {
+			//document.bgColor="440000";
+			TimerID.style.color="ff8800";
+			//SmallTimerID.style.color="ff8800";
+		}
+		else if (TotalSeconds < 16) {
+				TimerID.style.color="ff0000";
+				//SmallTimerID.style.color="ff0000";
+		}
+
+		if (TotalSeconds < 1) {
+			if (AutoArray[CurrentTimer] == 1) {
+				CurrentTimer++;
+					if (CurrentTimer==NamesArray.length) {
+						CurrentTimer=-1;
+						ClearTimer();
+						return false;
+					}
+					else {
+						CreateTimer(CurrentTimer);
+						return false;
+					}
+			}
+		}
+		/*else if (TotalSeconds < 0) {
+			TimerID.style.color="ff0000";
+			//SmallTimerID.style.color="ff0000";
+		}*/
+		/*if(TotalSeconds==0) {
+		window.clearInterval(timerinterval);
+		return;
+		}*/
+		TotalSeconds -= 1;
+		UpdateTimer();
+		//timertimeout = window.setTimeout("Tick()", 1000);
+	}
+
+	function UpdateTimer() {
+		var Seconds = Math.abs(TotalSeconds);
+
+		//var Hours = Math.floor(Seconds / 3600);
+		//Seconds -= Hours * (3600);
+
+		var Minutes = Math.floor(Seconds / 60);
+		Seconds -= Minutes * (60);
+
+
+		var TimeStr = ((TotalSeconds < 0) ? "-" : "") /*LeadingZero(Hours) + ":" +*/ + LeadingZero(Minutes) + ":" + LeadingZero(Seconds);
+
+
+		TimerID.innerHTML = TimeStr;
+		//SmallTimerID.innerHTML = TimeStr;
+	}
+
+	function LeadingZero(Time) {
+		return (Time < 10) ? "0" + Time : + Time;
+
+	}
+</script>
+</head>
+
+<body bgcolor="000000" text="ffffff">
+	<!--<div id='smalltimer' style="font-size: 14px;">
+	</div>
+	<div id='smalltitle' style="font-size: 14px;">
+	-
+	</div>-->
+	<div id='smallmode' style="font-size: 12px;">	
+	</div>
+	<div id='timer' style="text-align: center; font-size: 275px; font-family: sans-serif; margin-top: -50px;">
+	</div>
+	<div id='title' style="text-align: center; font-size: 110px; font-family: sans-serif;">
+	-
+	</div>
+	<div style='position: fixed; bottom: 0;'>
+		<form>
+			<div id="buttons">
+				<script>
+				/*for (var i=0; i<NamesArray.length; i++) {
+						document.write('<input type="button" name="timer1" value="'+NamesArray[i]+'" onClick="CreateTimer('+i+');">');
+				}*/
+				</script>
+			</div>
+			<input type="button" name="timer1" value="_CLEAR_" onClick="ClearTimer();">
+
+			<input type="button" name="timer1" value="-30s" onClick="TotalSeconds-=30; UpdateTimer();">
+			<input type="button" name="timer1" value="+30s" onClick="TotalSeconds+=30; UpdateTimer();">
+			<!--
+			<input type="button" name="timer1" value="Worship" onClick="CreateTimer(0);">	
+			<input type="button" name="timer1" value="Meet/Greet/etc." onClick="CreateTimer(1);">
+			<input type="button" name="timer1" value="Tithe Message" onClick="CreateTimer(2);">
+			<input type="button" name="timer1" value="Announcements" onClick="CreateTimer(3);">
+			<input type="button" name="timer1" value="Sermon" onClick="CreateTimer(4);">
+			<input type="button" name="timer1" value="Alter Song" onClick="CreateTimer(5);">
+			<input type="button" name="timer1" value="Altar Call" onClick="CreateTimer(6);">
+			<input type="button" name="timer1" value="_CLEAR_" onClick="ClearTimer();">
+			-->
+		</form>
+	</div>
+	<script>
+		window.onload = Initial();
+		//*
+		var key_space="32"; //Space
+		var key_escape="27"; //Escape
+		var key_minus="109"; //-
+		var key_plus="107"; //=
+		var key_tab="9"; //Tab
+		var x='';
+
+		document.onkeydown = keyPress;
+
+		function keyPress(e){
+			var x = e || window.event;
+			var key = (x.keyCode || x.which);
+			if(key == key_space){
+				CurrentTimer++;
+				if (CurrentTimer==NamesArray.length) {
+					CurrentTimer=-1;
+					ClearTimer();
+					return false;
+				}
+				else {
+					CreateTimer(CurrentTimer);
+					return false;
+				}
+			} else if(key == key_escape){
+				ClearTimer();
+				return false;
+			} else if(key == key_minus) {
+				TotalSeconds-=30;
+				UpdateTimer();
+				return false;
+			} else if(key == key_plus) {
+				TotalSeconds+=30;
+				UpdateTimer();
+				return false;
+			} else if(key == key_tab) {
+				Mode++;
+				if (Mode >= ModeNames.length) {
+					Mode = 0;
+				}
+				ModeSwitch(Mode);
+				return false;
+			}
+		}
+		//*/
+	</script>
+</body>
+</html>
