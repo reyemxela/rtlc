@@ -1,0 +1,82 @@
+<html>
+<head>
+</head>
+<body>
+<style>
+	html, body {
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+    width: 100%;
+    height: 100%;
+	}
+	iframe {
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+	}
+	div {
+    -webkit-transition: opacity .5s linear;
+	}
+	.date {
+		color: #888888;
+		font-family: Sans-Serif;
+		font-size: 12px;
+		position: fixed;
+		bottom: 1px;
+		left: 5px;
+	}
+.hidden {
+    opacity: 0;
+}
+</style>
+<div class="" id="framediv">
+</div>
+
+	<script>
+		var mydate = new Date();
+		var currentyear = mydate.getFullYear();
+		var currentmonth = mydate.getMonth();
+		var months = new Array("January "+(currentmonth > 0 ? currentyear+1 : currentyear), "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+		var width = 635; //635
+		var height = 540; //540
+		//var calendar = 'alexm.rox%40gmail.com';
+		var calendar = 'events%40roadtolifechurch.com';
+		var refreshinterval;
+		
+		function LoadFrames() {
+			document.getElementById('framediv').innerHTML = "";
+			var i = 1;
+			monthdigit = currentmonth+1;
+			while (i<7) {
+				//monthdigit = currentmonth+i;
+				if (monthdigit >12) {monthdigit -= 12; currentyear += 1}
+				if (monthdigit < 10) {monthdigit="0" + monthdigit}
+				//document.write('<iframe src="https://www.google.com/calendar/embed?title='+months[i-1]+'&amp;showNav=0&amp;showDate=0&amp;showPrint=0&amp;showTabs=0&amp;showCalendars=0&amp;showTz=0&amp;height='+height+'&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src='+calendar+'&amp;color=%2329527A&amp;ctz=America%2FNew_York&amp;dates='+currentyear+monthdigit+'01%2f'+currentyear+monthdigit+'02" style=" border-width:0 " width="'+width+'" height="'+height+'" frameborder="0" scrolling="no"></iframe>');
+				document.getElementById('framediv').innerHTML += '<iframe src="https://www.google.com/calendar/embed?title='+months[monthdigit-1]+'&amp;showNav=0&amp;showDate=0&amp;showPrint=0&amp;showTabs=0&amp;showCalendars=0&amp;showTz=0&amp;height='+height+'&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src='+calendar+'&amp;color=%2329527A&amp;ctz=America%2FNew_York&amp;dates='+currentyear+monthdigit+'01%2f'+currentyear+monthdigit+'02" style=" border-width:0 " width="'+width+'" height="'+height+'" frameborder="0" scrolling="no"></iframe>';
+				i++;
+				monthdigit++;
+			}
+			//window.setTimeout(function () {document.getElementById('framediv').className = '';}, 2000);
+		}
+		
+		/*
+		function Refresh() {
+			document.getElementById('framediv').className = 'hidden';
+			window.setTimeout(LoadFrames(),2000);
+		}*/
+		
+		LoadFrames();
+		//refreshinterval = window.setInterval("Refresh()", 10*1000);
+		//refreshinterval = window.setInterval("LoadFrames()", 60*1000);
+	</script>
+	
+<div class="date">
+<script>
+	var d = new Date();
+	document.write("Updated: " + d.toLocaleDateString() + ", " + d.toLocaleTimeString());
+</script>
+</div>
+
+</body>
+</html>
