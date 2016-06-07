@@ -3,6 +3,9 @@ import os
 from time import *
 import Tkinter as tk
 
+#room = "sanctuary"
+room = "resistance"
+
 debugmode = False
 
 root = tk.Tk()
@@ -17,18 +20,20 @@ root.focus_set()
 timelabeltext = tk.StringVar()
 labeltext = tk.StringVar()
 
-timelabel = tk.Label(root, textvariable = timelabeltext, bg="black", fg="white", font=("Helvetica", h/2))
-label = tk.Label(root, textvariable = labeltext, bg="black", fg="white", font=("Helvetica", h/6))
+timelabel = tk.Label(root, textvariable = timelabeltext, bg="black", fg="white", font=("Helvetica", h/3))
+label = tk.Label(root, textvariable = labeltext, bg="black", fg="white", font=("Helvetica", h/7))
 
 timelabel.pack(pady=(h/10, 0))
 label.pack()
 
-names = ["Worship", "Meet+Greet",   "Host Intro",   "Communion/Tithe",  "Intro/Giveaway",   "Message",  "Transition",   "Game/Connect"]
-times = [25,        5,              1,              4,                  2,                  15,         1,              15]
-
-
-services = [[5, 7, 0], [6, 9, 30], [6, 11, 0], [5, 20, 04]]
-#services = [[6, 11, 0]]
+if room == "sanctuary":
+    names = ["Worship", "Transition",   "Meet+Greet",   "Tithe Message",    "Sermon",   "Altar"]
+    times = [20,        3,				3,				5,					34,			8]
+    services = [[5, 7, 0], [6, 9, 30], [6, 11, 0]]
+if room == "resistance":
+    names = ["Worship", "Meet+Greet",   "Host Intro",   "Communion/Tithe",  "Intro/Giveaway",   "Message",  "Transition",   "Game/Connect"]
+    times = [25,        5,              1,              4,                  2,                  15,         1,              15]
+    services = [[6, 11, 0]]
 
 current = 0
 running = False
@@ -37,7 +42,7 @@ endtime = 0
 
 def debug(debugtext):
     if debugmode:
-        print(debugtext)
+		print(debugtext)
 
 def nexttimer():
     global current, endtime
