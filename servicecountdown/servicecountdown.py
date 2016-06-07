@@ -3,8 +3,11 @@ import os
 from time import *
 import Tkinter as tk
 
+f = open("countdown_room", "r")
+room = f.read(16)
+
 #room = "sanctuary"
-room = "resistance"
+#room = "resistance"
 
 debugmode = False
 
