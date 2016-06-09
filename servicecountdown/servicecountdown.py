@@ -6,7 +6,7 @@ import Tkinter as tk
 #f = open("countdown_room", "r")
 #room = f.read(16)
 
-room = open(filename,'r').read().split('\n')[0]
+room = open("countdown_room","r").read().split('\n')[0]
 
 #room = "sanctuary"
 #room = "resistance"
