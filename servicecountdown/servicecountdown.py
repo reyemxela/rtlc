@@ -31,14 +31,24 @@ label = tk.Label(root, textvariable = labeltext, bg="black", fg="white", font=("
 timelabel.pack(pady=(h/10, 0))
 label.pack()
 
-if room == "sanctuary":
-    names = ["Worship", "Transition",   "Meet+Greet",   "Tithe Message",    "Sermon",   "Altar"]
-    times = [20,        3,				3,				5,					34,			8]
-    services = [[5, 7, 0], [6, 9, 30], [6, 11, 0]]
-if room == "resistance":
-    names = ["Worship", "Meet+Greet",   "Host Intro",   "Communion/Tithe",  "Intro/Giveaway",   "Message",  "Transition",   "Game/Connect"]
-    times = [25,        5,              1,              4,                  2,                  15,         1,              15]
-    services = [[6, 11, 0]]
+def setroom():
+    global services, names, times
+    if room == "sanctuary":
+        services = [[5, 7, 0], [6, 9, 30], [6, 11, 0]]
+        wday = localtime().tm_wday
+        mday = localtime().tm_mday
+        if (wday == 5 and (mday > 0 and mday < 8)) or (wday == 6 and (mday > 1 and mday < 9)):
+            #first "full weekend", communion weekend
+            names = ["Worship", "Communion",   "Meet+Greet",   "Tithe Message",    "Sermon",   "Altar"]
+            times = [18,        6,				2,				5,					34,			8]
+        else:
+            #regular weekend
+            names = ["Worship", "Transition",   "Meet+Greet",   "Tithe Message",    "Sermon",   "Altar"]
+            times = [20,        3,				3,				5,					34,			8]
+    if room == "resistance":
+        services = [[6, 11, 0]]
+        names = ["Worship", "Meet+Greet",   "Host Intro",   "Communion/Tithe",  "Intro/Giveaway",   "Message",  "Transition",   "Game/Connect"]
+        times = [25,        5,              1,              4,                  2,                  15,         1,              15]
 
 current = 0
 running = False
@@ -62,6 +72,7 @@ def nexttimer():
 
 def reset():
     global current, endtime, running
+    setroom()
     debug("in reset")
     current = 0
     endtime = 0
