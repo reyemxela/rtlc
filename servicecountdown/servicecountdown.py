@@ -34,7 +34,7 @@ label.pack()
 def setroom():
     global services, names, times
     if room == "sanctuary":
-        services = [[5, 7, 0], [6, 9, 30], [6, 11, 0]]
+        services = [[5, 19, 0], [6, 9, 30], [6, 11, 0]]
         wday = localtime().tm_wday
         mday = localtime().tm_mday
         if (wday == 5 and (mday > 0 and mday < 8)) or (wday == 6 and (mday > 1 and mday < 9)):
