@@ -32,7 +32,7 @@ timelabel.pack(pady=(h/10, 0))
 label.pack()
 
 def setroom():
-    global services, names, times
+    global services, names, times, stopat
     if room == "sanctuary":
         services = [[5, 19, 0], [6, 9, 30], [6, 11, 0]]
         wday = localtime().tm_wday
@@ -41,14 +41,23 @@ def setroom():
             #first "full weekend", communion weekend
             names = ["Worship", "Communion",   "Meet+Greet",   "Tithe Message",    "Sermon",   "Altar"]
             times = [18,        6,				2,				5,					34,			8]
+            stopat = [0,        0,              0,              0,                  0,          -10]
         else:
             #regular weekend
             names = ["Worship", "Transition",   "Meet+Greet",   "Tithe Message",    "Sermon",   "Altar"]
             times = [20,        3,				3,				5,					34,			8]
+            stopat = [0,        0,              0,              0,                  0,          -10]
     if room == "resistance":
         services = [[6, 11, 0]]
         names = ["Worship", "Meet+Greet",   "Host Intro",   "Communion/Tithe",  "Intro/Giveaway",   "Message",  "Transition",   "Game/Connect"]
         times = [25,        5,              1,              4,                  2,                  15,         1,              15]
+        stopat = [0,        0,              0,              0,                  0,                  0,          0,              0]
+    if room == "testing":
+        services = [[localtime().tm_wday, localtime().tm_hour, localtime().tm_min]]
+        names = ["Worship", "Sermon",   "Altar"]
+        times = [.03,       .03,        .03]
+        stopat = [0,        0,          -1]
+
 
 current = 0
 running = False
@@ -94,12 +103,18 @@ def master():
     if running:
         debug("-is running")
         currenttime = endtime - time()
-        if currenttime < 0:
+        if currenttime < stopat[current] * 60:
             nexttimer()
         else:
-            m, s = divmod(currenttime, 60)
-            timelabeltext.set('%02d:%02d' % (m, s))
+            m, s = divmod(abs(currenttime), 60)
+            timelabeltext.set('%s%02d:%02d' % (("-" if currenttime < 0 else ""), m, s))
             labeltext.set('%s' % names[current])
+            if currenttime < 0:
+                label.configure(fg = "red")
+                timelabel.configure(fg = "red")
+            else:
+                label.configure(fg = "white")
+                timelabel.configure(fg = "white")
             root.after(250, master)
     else:
         debug("-not running")
@@ -109,18 +124,6 @@ def master():
                 start()
             else:
                 root.after(1000, master)
-            '''
-            debug("--right day")
-            if localtime().tm_hour == 11: #11
-                debug("---right hour")
-                if localtime().tm_min == 13: #0
-                    debug("----right minute")
-                    start()
-                else: #not right minute
-                    root.after(1000, master)
-            else: #not right hour
-                root.after(1000, master) #wait 1 second
-            '''
         else: #not right day
             root.after(3600000, master) #wait an hour (3,600,000 ms)
 
