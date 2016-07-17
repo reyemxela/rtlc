@@ -56,7 +56,7 @@ def setroom():
         services = [[localtime().tm_wday, localtime().tm_hour, localtime().tm_min]]
         names = ["Worship", "Sermon",   "Altar"]
         times = [.03,       .03,        .03]
-        stopat = [0,        0,          -1]
+        stopat = [0,        0,          -.2]
 
 
 current = 0
@@ -87,6 +87,8 @@ def reset():
     endtime = 0
     timelabeltext.set("--:--")
     labeltext.set("-")
+    label.configure(fg = "white")
+    timelabel.configure(fg = "white")
     running = False
 
 def start():
