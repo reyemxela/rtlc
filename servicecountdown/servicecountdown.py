@@ -24,29 +24,32 @@ root.focus_set()
 
 timelabeltext = tk.StringVar()
 labeltext = tk.StringVar()
+smallclocktext = tk.StringVar()
 
 timelabel = tk.Label(root, textvariable = timelabeltext, bg="black", fg="white", font=("Helvetica", h/3))
 label = tk.Label(root, textvariable = labeltext, bg="black", fg="white", font=("Helvetica", h/7))
+smallclocklabel = tk.Label(root, textvariable = smallclocktext, bg="black", fg="white", font=("Helvetica", h/70))
 
 timelabel.pack(pady=(h/10, 0))
 label.pack()
+smallclocklabel.pack(pady=(h/4, 0))
 
 def setroom():
     global services, names, times, stopat
     if room == "sanctuary":
-        services = [[5, 19, 0], [6, 9, 30], [6, 11, 0]]
+        services = [[5, 18, 55], [6, 9, 25], [6, 10, 55]]
         wday = localtime().tm_wday
         mday = localtime().tm_mday
         if (wday == 5 and (mday > 0 and mday < 8)) or (wday == 6 and (mday > 1 and mday < 9)):
             #first "full weekend", communion weekend
-            names = ["Worship", "Communion",   "Meet+Greet",   "Tithe Message",    "Sermon",   "Altar"]
-            times = [18,        6,				2,				5,					34,			8]
-            stopat = [0,        0,              0,              0,                  0,          -10]
+            names = ["Countdown",   "Worship", "Communion",   "Meet+Greet",   "Tithe Message",    "Sermon",   "Altar"]
+            times = [5,             18,        6,				2,				5,					34,			8]
+            stopat = [0,            0,         0,               0,              0,                  0,          -7]
         else:
             #regular weekend
-            names = ["Worship", "Transition",   "Meet+Greet",   "Tithe Message",    "Sermon",   "Altar"]
-            times = [20,        3,				3,				5,					34,			8]
-            stopat = [0,        0,              0,              0,                  0,          -10]
+            names = ["Countdown",   "Worship", "Transition",   "Meet+Greet",   "Tithe Message",    "Sermon",   "Altar"]
+            times = [5,             20,        3,				3,				5,					34,			8]
+            stopat = [0,            0,         0,               0,              0,                  0,          -7]
     if room == "resistance":
         services = [[6, 11, 0]]
         names = ["Worship", "Meet+Greet",   "Host Intro",   "Communion/Tithe",  "Intro/Giveaway",   "Message",  "Transition",   "Game/Connect"]
@@ -102,9 +105,11 @@ def start():
 def master():
     global currenttime
     debug("in master")
+    daytime = [localtime().tm_wday, localtime().tm_hour, localtime().tm_min]
     if running:
         debug("-is running")
         currenttime = endtime - time()
+        smallclocktext.set('Day: %s Time: %s:%s' % (strftime("%a"), daytime[1], daytime[2]))
         if currenttime < stopat[current] * 60:
             nexttimer()
         else:
@@ -120,14 +125,15 @@ def master():
             root.after(250, master)
     else:
         debug("-not running")
-        daytime = [localtime().tm_wday, localtime().tm_hour, localtime().tm_min]
         if daytime[0] in [x[0] for x in services]: #== 3: #6
+            smallclocktext.set('Day: %s Time: %s:%s' % (strftime("%a"), daytime[1], daytime[2]))
             if daytime in services:
                 start()
             else:
                 root.after(1000, master)
         else: #not right day
             root.after(3600000, master) #wait an hour (3,600,000 ms)
+            smallclocktext.set('Day: %s' % (strftime("%a")))
 
 
 reset()
