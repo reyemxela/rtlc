@@ -40,11 +40,11 @@ def setroom():
         services = [[5, 18, 55], [6, 9, 25], [6, 10, 55]]
         wday = localtime().tm_wday
         mday = localtime().tm_mday
-        if (wday == 5 and (mday > 0 and mday < 8)) or (wday == 6 and (mday > 1 and mday < 9)):
+        if (wday == 5 and (mday > 0 and mday < 8)) or (wday == 6 and (mday > 1 and mday < 9) or True):
             #first "full weekend", communion weekend
-            names = ["Countdown",   "Worship", "Communion",   "Meet+Greet",   "Tithe Message",    "Sermon",   "Altar"]
-            times = [5,             18,        6,				2,				5,					34,			8]
-            stopat = [0,            0,         0,               0,              0,                  0,          -7]
+            names = ["Countdown",   "Wrshp/Comm",   "Meet+Greet",   "Tithe Message",    "Sermon",   "Altar"]
+            times = [5,             24,				2,				5,					34,			8]
+            stopat = [0,            0,              0,              0,                  0,          -7]
         else:
             #regular weekend
             names = ["Countdown",   "Worship", "Transition",   "Meet+Greet",   "Tithe Message",    "Sermon",   "Altar"]
