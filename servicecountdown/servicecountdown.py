@@ -32,7 +32,7 @@ smallclocklabel = tk.Label(root, textvariable = smallclocktext, bg="black", fg="
 
 timelabel.pack(pady=(h/10, 0))
 label.pack()
-smallclocklabel.pack(pady=(h/4, 0))
+smallclocklabel.pack(pady=(h/8, 0))
 
 def setroom():
     global services, names, times, stopat
@@ -40,11 +40,11 @@ def setroom():
         services = [[5, 18, 55], [6, 9, 25], [6, 10, 55]]
         wday = localtime().tm_wday
         mday = localtime().tm_mday
-        if (wday == 5 and (mday > 0 and mday < 8)) or (wday == 6 and (mday > 1 and mday < 9) or True):
+        if (wday == 5 and (mday > 0 and mday < 8)) or (wday == 6 and (mday > 1 and mday < 9) and False):
             #first "full weekend", communion weekend
-            names = ["Countdown",   "Wrshp/Comm",   "Meet+Greet",   "Tithe Message",    "Sermon",   "Altar"]
-            times = [5,             24,				2,				5,					34,			8]
-            stopat = [0,            0,              0,              0,                  0,          -7]
+            names = ["Countdown",   "Worship",   "Communion",   "Meet+Greet",   "Tithe Message",    "Sermon",   "Altar"]
+            times = [5,             18,	         6,             2,			    5,					34,			8]
+            stopat = [0,            0,           0,             0,              0,                  0,          -7]
         else:
             #regular weekend
             names = ["Countdown",   "Worship", "Transition",   "Meet+Greet",   "Tithe Message",    "Sermon",   "Altar"]
