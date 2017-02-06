@@ -3,7 +3,7 @@ import os
 import time
 import glob
 import Tkinter as tk
-from PIL import Image, ImageTk
+from PIL import Image, ImageTk, ImageCms
 
 root = tk.Tk()
 
@@ -21,7 +21,7 @@ root.configure(background='black')
 root.focus_set()
 
 framerate = 1.0/60.0
-duration = 10.0
+duration = 1.0
 fadeduration = .5
 imagedir = '/Users/alexmeyer/Documents/_Programming/rtlc/slideshowimages/'
 
@@ -53,6 +53,9 @@ def LoadFiles():
             images.append(Image.open(files[i]))
             if images[i].size != (canvw, canvh):
                 images[i] = images[i].resize((canvw, canvh), Image.BICUBIC)
+            if images[i].mode == "CMYK":
+                # images[i] = images[i].convert("RGB")
+                images[i] = ImageCms.profileToProfile(images[i], 'USWebCoatedSWOP.icc', 'sRGB_v4_ICC_preference.icc', renderingIntent=0, outputMode='RGB')
 
 
 def Main():
