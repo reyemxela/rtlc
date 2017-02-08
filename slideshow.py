@@ -7,8 +7,8 @@ from PIL import Image, ImageTk, ImageCms
 
 root = tk.Tk()
 
-canvw, canvh = 480, 270
-# canvw, canvh = 1920, 1080
+# canvw, canvh = 200, 100
+canvw, canvh = 1920, 1080
 numscreens = 3
 
 # w, h = root.winfo_screenwidth(), root.winfo_screenheight()
@@ -20,10 +20,10 @@ root.geometry("%dx%d+0+0" % (w, h))
 root.configure(background='black')
 root.focus_set()
 
-framerate = 1.0/60.0
-duration = 1.0
+framerate = 1.0/30.0
+duration = 10.0
 fadeduration = .5
-imagedir = '/Users/alexmeyer/Documents/_Programming/rtlc/slideshowimages/'
+imagedir = 'slideshowimages/'
 
 canvas = [None]*numscreens
 canvasimage = [None]*numscreens
@@ -59,7 +59,7 @@ def LoadFiles():
 
 
 def Main():
-    global current
+    global current, images
     #       [i%numscreens] ?
     while True:
         if current == 0:
@@ -70,7 +70,7 @@ def Main():
                 blend[i] = ImageTk.PhotoImage( Image.blend( images[(current + i) % len(files)], images[(current + i + 1) % len(files)], alpha ) )
                 canvas[i].itemconfig(canvasimage[i], image=blend[i])
             root.update()
-            time.sleep(framerate)
+            # time.sleep(framerate)
             alpha += framerate / fadeduration
         current = (current + 1) % len(files)
         time.sleep(duration)
