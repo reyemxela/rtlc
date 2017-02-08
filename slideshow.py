@@ -7,7 +7,7 @@ from PIL import Image, ImageTk, ImageCms
 
 root = tk.Tk()
 
-# canvw, canvh = 200, 100
+# canvw, canvh = 480, 270
 canvw, canvh = 1920, 1080
 numscreens = 3
 
@@ -21,13 +21,14 @@ root.configure(background='black')
 root.focus_set()
 
 framerate = 1.0/30.0
-duration = 10.0
+duration = 15.0
 fadeduration = .5
 imagedir = 'slideshowimages/'
 
 canvas = [None]*numscreens
 canvasimage = [None]*numscreens
-blend = [None]*numscreens
+currentimage = [None]*numscreens
+# blend = [None]*numscreens
 
 files = []
 # newfiles = []
@@ -36,7 +37,7 @@ files = []
 current = 0
 
 for i in range(0, numscreens):
-    canvas[i] = (tk.Canvas(root, width=canvw, height=canvh, borderwidth=0, highlightthickness=0))
+    canvas[i] = tk.Canvas(root, width=canvw, height=canvh, borderwidth=0, highlightthickness=0)
     canvas[i].pack(side=tk.LEFT)
     canvasimage[i] = canvas[i].create_image(0, 0, image=None, anchor=tk.NW)
 
@@ -59,24 +60,23 @@ def LoadFiles():
 
 
 def Main():
-    global current, images
+    global current, images, files
     #       [i%numscreens] ?
-    while True:
-        if current == 0:
-            LoadFiles()
-        alpha = 0.0
-        while alpha <= 1.0:
-            for i in range(0, numscreens):
-                blend[i] = ImageTk.PhotoImage( Image.blend( images[(current + i) % len(files)], images[(current + i + 1) % len(files)], alpha ) )
-                canvas[i].itemconfig(canvasimage[i], image=blend[i])
-            root.update()
-            # time.sleep(framerate)
-            alpha += framerate / fadeduration
-        current = (current + 1) % len(files)
-        time.sleep(duration)
+    if current == 0:
+        LoadFiles()
+    for i in range(0, numscreens):
+        # print("screen: %s, current: %s, current + i mod files: %s" % (i,current,(current + i) % len(files)))
+        # blend[i] = ImageTk.PhotoImage( Image.blend( images[(current + i) % len(files)], images[(current + i + 1) % len(files)], 0 ) )
+        currentimage[i] = ImageTk.PhotoImage( images[(current + i) % len(files)] )
+        canvas[i].itemconfig(canvasimage[i], image=currentimage[i] )
+    root.update()
+    current = (current + 1) % len(files)
+    # time.sleep(duration)
+    root.after(int(duration) * 1000, Main)
 
 
 # LoadFiles()
-Main()
+# Main()
+root.after(10, Main)
 
 root.mainloop()
