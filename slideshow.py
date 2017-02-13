@@ -10,13 +10,14 @@ root = tk.Tk()
 # canvw, canvh = 480, 270
 canvw, canvh = 1920, 1080
 numscreens = 3
+offsetx = 1280
 
 # w, h = root.winfo_screenwidth(), root.winfo_screenheight()
 w, h = canvw*numscreens, canvh
 
 
 root.overrideredirect(1)
-root.geometry("%dx%d+0+0" % (w, h))
+root.geometry("%dx%d+%d+0" % (w, h, offsetx))
 root.configure(background='black')
 root.focus_set()
 
