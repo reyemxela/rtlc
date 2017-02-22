@@ -10,7 +10,7 @@ root = tk.Tk()
 # canvw, canvh = 480, 270
 canvw, canvh = 1920, 1080
 numscreens = 3
-offsetx = root.winfo_screenwidth() #get first monitor width for offset
+offsetx = 0 #root.winfo_screenwidth() #get first monitor width for offset
 
 # w, h = root.winfo_screenwidth(), root.winfo_screenheight()
 w, h = canvw*numscreens, canvh
