@@ -18,7 +18,8 @@ w, h = canvw*numscreens, canvh
 
 root.overrideredirect(1)
 root.geometry("%dx%d+%d+0" % (w, h, offsetx))
-root.configure(background='black')
+#root.configure(background='black')
+root.config(cursor="none")
 root.focus_set()
 
 framerate = 1.0/30.0
