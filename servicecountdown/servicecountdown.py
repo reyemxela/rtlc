@@ -55,6 +55,11 @@ def setroom():
         names = ["Worship", "Meet+Greet",   "Host Intro",   "Communion/Tithe",  "Intro/Giveaway",   "Message",  "Transition",   "Game/Connect"]
         times = [25,        5,              1,              4,                  2,                  15,         1,              15]
         stopat = [0,        0,              0,              0,                  0,                  0,          0,              0]
+    if room == "sanctuary2":
+	services = [[5, 18, 55], [6, 9, 25], [6, 10, 55]]
+	names =  ["Countdown",	"Worship",	"Transition",	"Tithe/Ann.",	"Teaching",	"Worship",	"Altar",	"Worship",	"Video"]
+	times =  [5,		8,		3,		5,		25,		10,		5,		7,		1]
+	stopat = [0,		0,		0,		0,		0,		0,		0,		0,		0]
     if room == "testing":
         services = [[localtime().tm_wday, localtime().tm_hour, localtime().tm_min]]
         names = ["Worship", "Sermon",   "Altar"]
