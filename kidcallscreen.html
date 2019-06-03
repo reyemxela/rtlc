@@ -3,6 +3,7 @@
         <style>
             body {
                 background-color: #111;
+                cursor: none;
             }
 
             .blink_me {
@@ -18,9 +19,18 @@
             #mainarea {
                 height:auto;
                 font-size: 40vw;
-                color: red;
+                color: #f00;
                 font-family: monospace;
                 text-align: center;
+            }
+
+            #textbox {
+                background-color: #222;
+                color: #555;
+                border: 0px;
+                position: fixed;
+                left: 10px;
+                bottom: 10px;
             }
         </style>
     </head>
@@ -28,7 +38,7 @@
         <div id="mainarea">
         </div>
         <form>
-            <input type="text" id="textbox" maxlength="4" size="6" style="background-color: #222; color: #555; border: 0px; position: fixed; left: 10px; bottom: 10px;" disabled />
+            <input type="text" id="textbox" maxlength="4" size="6" disabled />
         </form>
 
         <script>
