@@ -1,0 +1,75 @@
+<html>
+    <head>
+        <style>
+            body {
+                background-color: #111;
+            }
+
+            .blink_me {
+                animation: blinking 0.5s linear infinite;
+            }
+
+            @keyframes blinking {
+                0%  {opacity: 1.0;}
+                50% {opacity: 0.0;}
+                100%{opacity: 1.0;}
+            }
+
+            #mainarea {
+                height:auto;
+                font-size: 40vw;
+                color: red;
+                font-family: monospace;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body onreset="resize()">
+        <div id="mainarea">
+        </div>
+        <form>
+            <input type="text" id="textbox" maxlength="4" size="6" style="background-color: #222; color: #555; border: 0px; position: fixed; left: 10px; bottom: 10px;" disabled />
+        </form>
+
+        <script>
+        var textbox = document.getElementById('textbox');
+        var mainarea = document.getElementById('mainarea');
+
+        var key_escape = "27";
+        var key_enter = "13";
+
+        var timeout = null;
+        // var charcheck = /a-zA-Z0-9/;
+
+        document.onkeydown = keyPress;
+
+        function keyPress(e) {
+            var x = e || window.event;
+            var key = (x.keycode || x.which);
+
+            if (key == key_escape) {
+                textbox.value = '';
+                mainarea.innerHTML = '';
+                clearTimeout(timeout);
+            } else if (key == key_enter && textbox.value.length > 0) {
+                mainarea.innerHTML = textbox.value;
+                textbox.value = '';
+                clearTimeout(timeout);
+                mainarea.classList.add("blink_me");
+                timeout = setTimeout(function() {
+                    mainarea.classList.remove("blink_me");
+                }, 2000);
+            } else {
+                if ((key > 47 && key < 58) || // numeric (0-9)
+                    (key > 64 && key < 91) || // upper alpha (A-Z)
+                    (key > 96 && key < 123)) { // lower alpha (a-z)
+                    if (textbox.value.length < 4) {
+                        var y = String.fromCharCode(key);
+                        textbox.value += y;
+                    }
+                }
+            }
+        }
+        </script>
+    </body>
+</html>
